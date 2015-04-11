@@ -1,0 +1,19 @@
+f2n<-function(f) as.numeric(levels(f))[f]
+
+xyLogscale <- function (lims = c(1e-04, 1000),labAdd=NULL) 
+{
+  labels <- c(1:9) * rep(10^c(-4:5), rep(9, 10))
+  labels <- labels[labels >= lims[1] & labels <= lims[2]]
+    if (!is.null(labAdd)) labels<-sort(c(labels,labAdd))
+  at <- log10(labels)
+  sel10 <- round(at - round(at), 6)==0
+  if(!is.null(labAdd)) {
+    att<-(at-log10(labAdd))
+    selAdd <- round(att - round(att), 6)==0
+  } else selAdd <-rep(FALSE,length(labels))
+  
+  sel<-labels%in%c(labels[sel10],labels[selAdd])
+  if (sum(sel) > 1) 
+    labels[!sel] <- ""
+  list(log = TRUE, at = 10^at, labels = labels)
+}
